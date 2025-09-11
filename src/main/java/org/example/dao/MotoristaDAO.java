@@ -23,8 +23,32 @@ public class MotoristaDAO {
             stmt.setString(1, motorista.getNome());
             stmt.setString(2, motorista.getCnh());
             stmt.setString(3, motorista.getVeiculo());
-            stmt.setString(3, motorista.getCidade_base());
+            stmt.setString(4, motorista.getCidade_base());
             stmt.executeUpdate();
         }
+    }
+
+    public Motorista buscarPorId (int id) throws SQLException {
+        String query = """
+                SELECT * FROM motorista WHERE id = ?
+                """;
+
+        try (Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, id);
+            var rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Motorista(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("cnh"),
+                        rs.getString("veiculo"),
+                        rs.getString("cidade_base")
+                );
+            }
+        }
+        return null;
     }
 }

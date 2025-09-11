@@ -28,4 +28,29 @@ public class ClienteDAO {
             stmt.executeUpdate();
         }
     }
+
+    public Cliente buscarPorId(int id) throws SQLException {
+        String query = """
+                SELECT * FROM cliente WHERE id = ?
+                """;
+
+        try (Connection conn = Conexao.conectar();
+        PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, id);
+            var rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return new Cliente(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("cpf"),
+                        rs.getString("endereco"),
+                        rs.getString("cidade"),
+                        rs.getString("estado")
+                );
+            }
+        }
+        return null;
+    }
 }

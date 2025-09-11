@@ -13,9 +13,9 @@ public class Pedido {
     private Status status;
 
     public enum Status {
-        PENDENTE,
-        ENTREGUE,
-        CANCELADO
+        Pendente,
+        Entregue,
+        Cancelado
     }
 
     public Pedido(int id, Cliente id_cliente, LocalDate data_pedido, double volume, double peso, Status status) {

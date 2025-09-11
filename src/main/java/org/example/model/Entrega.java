@@ -5,8 +5,8 @@ import java.time.LocalDate;
 public class Entrega {
 
     private int id;
-    private Pedido pedido_id;
-    private Motorista motorista_id;
+    private Pedido pedido;
+    private Motorista motorista;
     private LocalDate data_saida;
     private LocalDate data_entrega;
     private Status status;
@@ -17,18 +17,18 @@ public class Entrega {
         ATRASADA
     }
 
-    public Entrega(int id, Pedido pedido_id, Motorista motorista_id, LocalDate data_saida, LocalDate data_entrega, Status status) {
+    public Entrega(int id, Pedido pedido, Motorista motorista, LocalDate data_saida, LocalDate data_entrega, Status status) {
         this.id = id;
-        this.pedido_id = pedido_id;
-        this.motorista_id = motorista_id;
+        this.pedido = pedido;
+        this.motorista = motorista;
         this.data_saida = data_saida;
         this.data_entrega = data_entrega;
         this.status = status;
     }
 
-    public Entrega(Pedido pedido_id, Motorista motorista_id, LocalDate data_saida, LocalDate data_entrega, Status status) {
-        this.pedido_id = pedido_id;
-        this.motorista_id = motorista_id;
+    public Entrega(Pedido pedido, Motorista motorista, LocalDate data_saida, LocalDate data_entrega, Status status) {
+        this.pedido = pedido;
+        this.motorista = motorista;
         this.data_saida = data_saida;
         this.data_entrega = data_entrega;
         this.status = status;
@@ -38,12 +38,12 @@ public class Entrega {
         return id;
     }
 
-    public Pedido getPedido_id() {
-        return pedido_id;
+    public Pedido getPedido() {
+        return pedido;
     }
 
-    public Motorista getMotorista_id() {
-        return motorista_id;
+    public Motorista getMotorista() {
+        return motorista;
     }
 
     public LocalDate getData_saida() {
@@ -70,12 +70,12 @@ public class Entrega {
         this.data_saida = data_saida;
     }
 
-    public void setMotorista_id(Motorista motorista_id) {
-        this.motorista_id = motorista_id;
+    public void setMotorista(Motorista motorista) {
+        this.motorista = motorista;
     }
 
-    public void setPedido_id(Pedido pedido_id) {
-        this.pedido_id = pedido_id;
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
     }
 
     public void setId(int id) {

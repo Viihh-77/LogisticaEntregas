@@ -61,23 +61,27 @@ public class Estoque {
                 }
 
                 case 2 -> {
-
+                    Atendente.cadastrarPedido();
+                    break;
                 }
 
                 case 3 -> {
-
+                    Atendente.gerarEntrega();
+                    break;
                 }
 
                 case 4 -> {
-
+                    Atendente.registrarEntrega();
+                    break;
                 }
 
                 case 5 -> {
-
+                    Atendente.atualizarStatusEntrega();
+                    break;
                 }
 
                 case 6 -> {
-
+                    Atendente.listarEntregas();
                 }
 
                 case 7 -> {
