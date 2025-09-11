@@ -86,6 +86,35 @@ public class Estoque {
 
                 case 7 -> {
 
+                    System.out.println(" ");
+                    System.out.println("|            ESCOLHA RELATÓRIO            |");
+                    System.out.println("|                                         |");
+                    System.out.println("| 1 - Total de Entregas por Motorista     |");
+                    System.out.println("| 2 - Clientes com Maior Volume Entregue  |");
+                    System.out.println("| 3 - Pedidos Pendentes por Estado        |");
+                    System.out.println("| 4 - Entregas Atrasadas por Cidade       |");
+                    System.out.println(" ");
+                    int escolha = input.nextInt();
+                    input.nextLine();
+
+                    switch (escolha) {
+
+                        case 1 -> {
+
+                        }
+
+                        case 2 -> {
+
+                        }
+
+                        case 3 -> {
+
+                        }
+
+                        case 4 -> {
+
+                        }
+                    }
                 }
 
                 case 8 -> {
@@ -98,6 +127,30 @@ public class Estoque {
 
                 case 10 -> {
 
+                    System.out.println(" ");
+                    System.out.println("|     ESCOLHA EXCLUIR     |");
+                    System.out.println("|                         |");
+                    System.out.println("| 1 - Excluir Entrega     |");
+                    System.out.println("| 2 - Excluir Cliente     |");
+                    System.out.println("| 3 - Excluir Motorista   |");
+                    System.out.println(" ");
+                    int escolha = input.nextInt();
+                    input.nextLine();
+
+                    switch (escolha) {
+
+                        case 1 -> {
+
+                        }
+
+                        case 2 -> {
+
+                        }
+
+                        case 3 -> {
+
+                        }
+                    }
                 }
 
                 case 0 -> {
