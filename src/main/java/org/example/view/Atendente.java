@@ -2,6 +2,7 @@ package org.example.view;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import org.example.dao.ClienteDAO;
@@ -199,6 +200,7 @@ public class Atendente {
         }
     }
 
+    //Listar todas as entregas com Cliente e Motorista
     public static void listarEntregas() {
         try {
             var entregaDAO = new EntregaDAO();
@@ -218,6 +220,159 @@ public class Atendente {
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Erro: Entrega não pode ser listada!");
+        }
+    }
+
+    // Relatorio: Total de entregas por Motorista
+    public static void entregasPorMotorista() {
+        var EntregaDAO = new EntregaDAO();
+
+        try {
+            EntregaDAO.entregaPorMotorista();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Erro: Relatório não pode ser gerado!");
+        }
+    }
+
+    // Relatorio: Clientes com Maior Volume Entregue
+    public static void maiorVolumeEntregue() {
+        var EntregaDAO = new EntregaDAO();
+
+        try {
+            EntregaDAO.maiorVolumeEntregue();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Erro: Relatório não pode ser gerado!");
+        }
+    }
+
+    // Relatorio: Pedidos Pendentes por Estado
+    public static void pedidosPendentes() {
+        var PedidoDAO = new PedidoDAO();
+
+        try {
+            PedidoDAO.pedidosPendentes();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Erro: Relatório não pode ser gerado!");
+        }
+    }
+
+    // Relatorio: Entregas Atrasadas por Cidades
+    public static void entregasAtrasadas() {
+        var EntregaDAO = new EntregaDAO();
+
+        try {
+            EntregaDAO.entregasAtrasadas();
+        } catch (SQLException e) {
+            System.out.println("Erro: Ralatório não pode ser gerado!");
+        }
+    }
+
+    // Buscar Pedido por CPF/CNPJ do Cliente
+    public static void buscarPorCPF() {
+        try {
+            var PedidoDAO = new PedidoDAO();
+
+            System.out.println("CPF: ");
+            String cpf = input.nextLine();
+
+            List<Pedido> pedidos = PedidoDAO.buscarPorCPF(cpf);
+
+            for (Pedido pedido : pedidos) {
+                System.out.println("ID: " + pedido.getId());
+                System.out.println("Cliente: " + pedido.getId_cliente().getNome());
+                System.out.println("Data: " + pedido.getData_pedido());
+                System.out.println("Volume: " + pedido.getVolume());
+                System.out.println("Peso: " + pedido.getPeso());
+                System.out.println("Status: " + pedido.getStatus());
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Erro: Não foi possivel fazer a busca do pedido!");
+        }
+    }
+
+    // Cancelar Pedido
+    public static void cancelarPedido() {
+        try {
+            var PedidoDAO = new PedidoDAO();
+
+            System.out.println("ID: ");
+            int id = input.nextInt();
+            input.nextLine();
+
+            PedidoDAO.cancelarPedido(id);
+
+            System.out.println("Sucesso: Pedido cancelado!");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Erro: Não foi possivel cancelar o pedido!");
+        }
+    }
+
+    // Excluir Entrega
+    public static void excluirEntrega() {
+        try {
+            var EntregaDAO = new EntregaDAO();
+
+            System.out.println("ID: ");
+            int id = input.nextInt();
+            input.nextLine();
+
+            EntregaDAO.excluirEntrega(id);
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Erro: Não foir possivel excluir a entrega!");
+        }
+    }
+
+    // Excluir Cliente
+    public static void excluirCliente() {
+        try {
+            var ClienteDAO = new ClienteDAO();
+
+            System.out.println("ID: ");
+            int id = input.nextInt();
+            input.nextLine();
+
+            boolean sucesso = ClienteDAO.excluirCliente(id);
+
+            if (sucesso) {
+                System.out.println("Sucesso: Cliente excluido!");
+            } else {
+                System.out.println("Erro: Não foi possivel excluir o cliente!");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Erro: Não foi possivel excluir o cliente!");
+        }
+    }
+
+    // Excluir Motorista
+    public static void excluirMotorista() {
+        try {
+            var MotoristaDAO = new MotoristaDAO();
+
+            System.out.println("ID: ");
+            int id = input.nextInt();
+            input.nextLine();
+
+            boolean sucesso = MotoristaDAO.excluirMotorista(id);
+
+            if (sucesso) {
+                System.out.println("Sucesso: Motorista excluido!");
+            } else {
+                System.out.println("Erro: Não foi possivel excluir o motorista!");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Erro: Não foi possivel excluir o motorista!");
         }
     }
 }

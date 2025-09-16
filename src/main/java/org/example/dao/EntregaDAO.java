@@ -1,5 +1,6 @@
 package org.example.dao;
 
+import com.mysql.cj.jdbc.ConnectionWrapper;
 import org.example.model.Cliente;
 import org.example.model.Entrega;
 import org.example.model.Motorista;
@@ -125,5 +126,109 @@ public class EntregaDAO {
 
         return entregas;
 
+    }
+
+    public void entregaPorMotorista() throws SQLException {
+        String query = """
+                SELECT m.id, m.nome, COUNT(e.id) AS total_entregas
+                FROM motorista m
+                LEFT JOIN entrega e ON e.motorista_id = m.id
+                GROUP BY m.id, m.nome
+                """;
+
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String nome = rs.getString("nome");
+                int total = rs.getInt("total_entregas");
+
+                System.out.println("Motorista: " + nome + " | ID: " + id + " | Total Entregas: " + total);
+            }
+        }
+    }
+
+    public void maiorVolumeEntregue() throws SQLException {
+        String query = """
+                    SELECT c.id, c.nome, SUM(p.volume) AS total_volume
+                    FROM cliente c
+                    JOIN pedido p ON p.cliente_id = c.id
+                    JOIN entrega e ON e.pedido_id = p.id
+                    WHERE e.status = 'ENTREGA'
+                    GROUP BY c.id, c.nome
+                    ORDER BY total_volume DESC
+                """;
+
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String nome = rs.getString("nome");
+                double volume = rs.getDouble("total_volume");
+
+                System.out.println("Cliente: " + nome + " | ID: " + id + " | Volume: " + volume);
+            }
+        }
+    }
+
+    public void entregasAtrasadas() throws SQLException {
+        String query = """
+                    SELECT c.cidade, COUNT(e.id) AS total_atrasadas
+                    FROM entrega e
+                    JOIN pedido p ON e.pedido_id = p.id
+                    JOIN cliente c ON p.cliente_id = c.id
+                    WHERE e.status = 'ATRASADA'
+                    GROUP BY c.cidade
+                    ORDER BY total_atrasadas DESC
+                """;
+
+        try (Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(query)) {
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String cidade = rs.getString("cidade");
+                int total = rs.getInt("total_atrasadas");
+
+                System.out.println("Cidade: " + cidade + " | Entregas atrasadas: " + total);
+            }
+        }
+    }
+
+    public void excluirEntrega(int id) throws SQLException {
+        String validaQuery = """
+                SELECT status FROM entrega WHERE id = ?
+                """;
+        String deletaQuery = """
+                DELETE FROM entrega WHERE id = ?
+                """;
+
+        try (Connection conn = Conexao.conectar();
+            PreparedStatement validaStmt = conn.prepareStatement(validaQuery)) {
+
+            validaStmt.setInt(1, id);
+            ResultSet rs = validaStmt.executeQuery();
+
+            if (rs.next()) {
+                String status = rs.getString("status");
+                if (!status.equalsIgnoreCase("EM_ROTA")) {
+                    System.out.println("Erro: Não é possível excluir essa entrega!");
+                    return;
+                } else {
+                    System.out.println("Erro: Entrega não encontrada!");
+                    return;
+                }
+            }
+
+            try (PreparedStatement deletaStmt = conn.prepareStatement(deletaQuery)) {
+                deletaStmt.setInt(1, id);
+                deletaStmt.executeUpdate();
+                System.out.println("Sucesso: Entrega excluida!");
+            }
+        }
     }
 }

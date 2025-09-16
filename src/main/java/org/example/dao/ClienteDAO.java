@@ -5,6 +5,7 @@ import org.example.util.Conexao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ClienteDAO {
@@ -17,8 +18,8 @@ public class ClienteDAO {
                 (?,?,?,?,?)
                 """;
 
-        try(Connection conn = Conexao.conectar();
-            PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, cliente.getNome());
             stmt.setString(2, cliente.getCpf());
@@ -35,7 +36,7 @@ public class ClienteDAO {
                 """;
 
         try (Connection conn = Conexao.conectar();
-        PreparedStatement stmt = conn.prepareStatement(query)) {
+             PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setInt(1, id);
             var rs = stmt.executeQuery();
@@ -52,5 +53,33 @@ public class ClienteDAO {
             }
         }
         return null;
+    }
+
+    public boolean excluirCliente(int id) throws SQLException {
+        String verificaQuery = """
+                SELECT COUNT(*) FROM pedido WHERE cliente_id = ?
+                """;
+
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement stmt = conn.prepareStatement(verificaQuery)) {
+
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                return false;
+        }
+    }
+
+        String deletaQuery = """
+                DELETE FROM cliente WHERE id = ?
+                """;
+
+        try (Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(deletaQuery)){
+
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+            return true;
+        }
     }
 }

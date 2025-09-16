@@ -82,6 +82,7 @@ public class Estoque {
 
                 case 6 -> {
                     Atendente.listarEntregas();
+                    break;
                 }
 
                 case 7 -> {
@@ -100,29 +101,35 @@ public class Estoque {
                     switch (escolha) {
 
                         case 1 -> {
-
+                            Atendente.entregasPorMotorista();
+                            break;
                         }
 
                         case 2 -> {
-
+                            Atendente.maiorVolumeEntregue();
+                            break;
                         }
 
                         case 3 -> {
-
+                            Atendente.pedidosPendentes();
+                            break;
                         }
 
                         case 4 -> {
-
+                            Atendente.entregasAtrasadas();
+                            break;
                         }
                     }
                 }
 
                 case 8 -> {
-
+                    Atendente.buscarPorCPF();
+                    break;
                 }
 
                 case 9 -> {
-
+                    Atendente.cancelarPedido();
+                    break;
                 }
 
                 case 10 -> {
@@ -140,15 +147,18 @@ public class Estoque {
                     switch (escolha) {
 
                         case 1 -> {
-
+                            Atendente.excluirEntrega();
+                            break;
                         }
 
                         case 2 -> {
-
+                            Atendente.excluirCliente();
+                            break;
                         }
 
                         case 3 -> {
-
+                            Atendente.excluirMotorista();
+                            break;
                         }
                     }
                 }

@@ -5,6 +5,7 @@ import org.example.util.Conexao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MotoristaDAO {
@@ -50,5 +51,33 @@ public class MotoristaDAO {
             }
         }
         return null;
+    }
+
+    public boolean excluirMotorista(int id) throws SQLException {
+        String verificaQuery = """
+                SELECT COUNT(*) FROM entrega WHERE motorista_id = ?
+                """;
+
+        try (Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(verificaQuery)){
+
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                return false;
+            }
+        }
+
+        String deletaQuery = """
+                DELETE FROM motorista WHERE id = ?
+                """;
+
+        try (Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(deletaQuery)) {
+
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+            return true;
+        }
     }
 }

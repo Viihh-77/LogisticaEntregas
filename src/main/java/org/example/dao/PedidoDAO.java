@@ -6,8 +6,11 @@ import org.example.util.Conexao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PedidoDAO {
 
@@ -56,5 +59,86 @@ public class PedidoDAO {
             }
         }
         return null;
+    }
+
+    public void pedidosPendentes() throws SQLException {
+        String query = """
+                    SELECT c.estado, COUNT(p.id) AS total_pedidos
+                    FROM pedido p
+                    JOIN cliente c ON p.cliente_id = c.id
+                    WHERE p.status = 'Pendente'
+                    GROUP BY c.estado
+                    ORDER BY total_pedidos DESC       
+                """;
+
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String estado = rs.getString("estado");
+                int total = rs.getInt("total_pedidos");
+
+                System.out.println("Estado: " + estado + " | Pedidos pendentes: " + total);
+            }
+        }
+    }
+
+    public List<Pedido> buscarPorCPF(String cpf) throws SQLException {
+        String query = """
+                    SELECT p.id AS pedido_id, p.cliente_id, p.data_pedido, p.volume, p.peso, p.status,
+                           c.nome, c.cpf, c.endereco, c.cidade, c.estado
+                    FROM pedido p
+                    JOIN cliente c ON p.cliente_id = c.id
+                    WHERE c.cpf = ?
+                """;
+
+        List<Pedido> pedidos = new ArrayList<>();
+
+        try (Connection conn = Conexao.conectar();
+        PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, cpf);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Cliente cliente = new Cliente(
+                        rs.getInt("cliente_id"),
+                        rs.getString("nome"),
+                        rs.getString("cpf"),
+                        rs.getString("endereco"),
+                        rs.getString("cidade"),
+                        rs.getString("estado")
+                );
+
+                Pedido pedido = new Pedido(
+                        rs.getInt("pedido_id"),
+                        cliente,
+                        rs.getDate("data_pedido").toLocalDate(),
+                        rs.getDouble("volume"),
+                        rs.getDouble("peso"),
+                        Pedido.Status.valueOf(rs.getString("status"))
+                );
+                pedidos.add(pedido);
+            }
+        }
+
+        return pedidos;
+
+    }
+
+    public void cancelarPedido(int id) throws SQLException {
+        String query = """
+                UPDATE pedido SET status = ? WHERE id = ?
+                """;
+
+        try (Connection conn = Conexao.conectar();
+        PreparedStatement stmt = conn.prepareStatement(query)){
+
+            stmt.setString(1, Pedido.Status.Cancelado.name());
+            stmt.setInt(2, id);
+            stmt.executeUpdate();
+
+        }
     }
 }
