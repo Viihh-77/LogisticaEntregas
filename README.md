@@ -79,6 +79,20 @@ Criar um sistema de logística que permita:
 
 ---
 
+## 🔗 Conexão com o Banco de Dados
+
+O sistema se conecta ao **MySQL** usando **JDBC**. As informações de conexão são:
+
+```text
+Host: localhost
+Porta: 3356
+Banco: SistemaLogistica
+Usuário: root
+Senha: mysqlPW
+```
+
+---
+
 ## 🗄️ Script SQL para Criação do Banco
 
 ```sql
